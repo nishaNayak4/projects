@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Form Validation</title>
+  <title>Responsive Login Form</title>
 
   <style>
 
@@ -25,7 +25,7 @@
 
     .container{
       width:100%;
-      max-width:400px;
+      max-width:420px;
       background:white;
       padding:30px;
       border-radius:20px;
@@ -42,7 +42,8 @@
       margin-bottom:18px;
     }
 
-    .input-box input{
+    .input-box input,
+    .input-box textarea{
       width:100%;
       padding:14px;
       border:2px solid #ddd;
@@ -51,7 +52,13 @@
       font-size:16px;
     }
 
-    .input-box input:focus{
+    .input-box textarea{
+      resize:none;
+      height:100px;
+    }
+
+    .input-box input:focus,
+    .input-box textarea:focus{
       border-color:#4e54c8;
     }
 
@@ -87,8 +94,8 @@
 
     .output p{
       margin-bottom:10px;
-      color:#333;
       word-break:break-word;
+      color:#333;
     }
 
     @media(max-width:450px){
@@ -115,79 +122,141 @@
 
     <h1>Login Form</h1>
 
+    <!-- Name -->
     <div class="input-box">
-      <input type="text" id="name" placeholder="Enter your name">
+      <input 
+        type="text" 
+        id="name" 
+        placeholder="Enter your name"
+        onkeyup="validateName()"
+      >
       <div class="error" id="nameError"></div>
     </div>
 
+    <!-- Email -->
     <div class="input-box">
-      <input type="email" id="email" placeholder="Enter your email">
+      <input 
+        type="email" 
+        id="email" 
+        placeholder="Enter your email"
+        onkeyup="validateEmail()"
+      >
       <div class="error" id="emailError"></div>
     </div>
 
+    <!-- Password -->
     <div class="input-box">
-      <input type="password" id="password" placeholder="Enter your password">
+      <input 
+        type="password" 
+        id="password" 
+        placeholder="Enter your password"
+        onkeyup="validatePassword()"
+      >
       <div class="error" id="passwordError"></div>
     </div>
 
-    <button onclick="validateForm()">Login</button>
+    <!-- Message -->
+    <div class="input-box">
+      <textarea 
+        id="message" 
+        placeholder="Enter your message"
+      ></textarea>
+    </div>
 
+    <button onclick="submitForm()">Submit</button>
+
+    <!-- Output -->
     <div class="output" id="output">
       <p id="showName"></p>
       <p id="showEmail"></p>
       <p id="showPassword"></p>
+      <p id="showMessage"></p>
     </div>
 
   </div>
 
   <script>
 
-    function validateForm(){
+    // Name Validation
+    function validateName(){
 
       let name = document.getElementById("name").value.trim();
-      let email = document.getElementById("email").value.trim();
-      let password = document.getElementById("password").value.trim();
+      let nameError = document.getElementById("nameError");
 
-      let valid = true;
-
-      // Clear previous errors
-      document.getElementById("nameError").innerHTML = "";
-      document.getElementById("emailError").innerHTML = "";
-      document.getElementById("passwordError").innerHTML = "";
-
-      // Name validation
       if(name === ""){
-        document.getElementById("nameError").innerHTML =
-        "Name is required";
-        valid = false;
+        nameError.innerHTML = "Name is required";
+        return false;
       }
 
-      // Email validation
+      else if(!/^[A-Za-z ]+$/.test(name)){
+        nameError.innerHTML = "Only letters are allowed";
+        return false;
+      }
+
+      else{
+        nameError.innerHTML = "";
+        return true;
+      }
+    }
+
+    // Email Validation
+    function validateEmail(){
+
+      let email = document.getElementById("email").value.trim();
+      let emailError = document.getElementById("emailError");
+
       if(email === ""){
-        document.getElementById("emailError").innerHTML =
-        "Email is required";
-        valid = false;
-      }
-      else if(!email.includes("@") || !email.includes(".")){
-        document.getElementById("emailError").innerHTML =
-        "Enter a valid email";
-        valid = false;
+        emailError.innerHTML = "Email is required";
+        return false;
       }
 
-      // Password validation
+      else if(!/^[^ ]+@[^ ]+\.[a-z]{2,3}$/.test(email)){
+        emailError.innerHTML = "Enter a valid email";
+        return false;
+      }
+
+      else{
+        emailError.innerHTML = "";
+        return true;
+      }
+    }
+
+    // Password Validation
+    function validatePassword(){
+
+      let password = document.getElementById("password").value.trim();
+      let passwordError = document.getElementById("passwordError");
+
       if(password === ""){
-        document.getElementById("passwordError").innerHTML =
-        "Password is required";
-        valid = false;
-      }
-      else if(password.length < 6){
-        document.getElementById("passwordError").innerHTML =
-        "Password must be at least 6 characters";
-        valid = false;
+        passwordError.innerHTML = "Password is required";
+        return false;
       }
 
-      // If all validations pass
-      if(valid){
+      else if(password.length < 6){
+        passwordError.innerHTML =
+        "Password must be at least 6 characters";
+        return false;
+      }
+
+      else{
+        passwordError.innerHTML = "";
+        return true;
+      }
+    }
+
+    // Submit Form
+    function submitForm(){
+
+      let validName = validateName();
+      let validEmail = validateEmail();
+      let validPassword = validatePassword();
+
+      if(validName && validEmail && validPassword){
+
+        let name = document.getElementById("name").value;
+        let email = document.getElementById("email").value;
+        let password = document.getElementById("password").value;
+        let message = document.getElementById("message").value;
 
         document.getElementById("showName").innerHTML =
         "<strong>Name:</strong> " + name;
@@ -198,8 +267,12 @@
         document.getElementById("showPassword").innerHTML =
         "<strong>Password:</strong> " + password;
 
+        document.getElementById("showMessage").innerHTML =
+        "<strong>Message:</strong> " + message;
+
         document.getElementById("output").style.display = "block";
       }
+
       else{
         document.getElementById("output").style.display = "none";
       }
