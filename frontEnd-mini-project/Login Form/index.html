@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Login Form</title>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, sans-serif;
+    }
+
+    body{
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:linear-gradient(135deg,#4e54c8,#8f94fb);
+      padding:20px;
+    }
+
+    .container{
+      width:100%;
+      max-width:420px;
+      background:white;
+      padding:30px;
+      border-radius:20px;
+      box-shadow:0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    h1{
+      text-align:center;
+      margin-bottom:25px;
+      color:#333;
+    }
+
+    .input-box{
+      margin-bottom:18px;
+    }
+
+    .input-box input,
+    .input-box textarea{
+      width:100%;
+      padding:14px;
+      border:2px solid #ddd;
+      border-radius:10px;
+      outline:none;
+      font-size:16px;
+    }
+
+    .input-box textarea{
+      resize:none;
+      height:100px;
+    }
+
+    .input-box input:focus,
+    .input-box textarea:focus{
+      border-color:#4e54c8;
+    }
+
+    .error{
+      color:red;
+      font-size:14px;
+      margin-top:5px;
+    }
+
+    button{
+      width:100%;
+      padding:14px;
+      border:none;
+      background:#4e54c8;
+      color:white;
+      font-size:18px;
+      border-radius:10px;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    button:hover{
+      background:#373cc0;
+    }
+
+    .output{
+      margin-top:25px;
+      padding:15px;
+      background:#f4f4f4;
+      border-radius:10px;
+      display:none;
+    }
+
+    .output p{
+      margin-bottom:10px;
+      word-break:break-word;
+      color:#333;
+    }
+
+    @media(max-width:450px){
+
+      .container{
+        padding:20px;
+      }
+
+      h1{
+        font-size:24px;
+      }
+
+      button{
+        font-size:16px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>Login Form</h1>
+
+    <!-- Name -->
+    <div class="input-box">
+      <input 
+        type="text" 
+        id="name" 
+        placeholder="Enter your name"
+        onkeyup="validateName()"
+      >
+      <div class="error" id="nameError"></div>
+    </div>
+
+    <!-- Email -->
+    <div class="input-box">
+      <input 
+        type="email" 
+        id="email" 
+        placeholder="Enter your email"
+        onkeyup="validateEmail()"
+      >
+      <div class="error" id="emailError"></div>
+    </div>
+
+    <!-- Password -->
+    <div class="input-box">
+      <input 
+        type="password" 
+        id="password" 
+        placeholder="Enter your password"
+        onkeyup="validatePassword()"
+      >
+      <div class="error" id="passwordError"></div>
+    </div>
+
+    <!-- Message -->
+    <div class="input-box">
+      <textarea 
+        id="message" 
+        placeholder="Enter your message"
+      ></textarea>
+    </div>
+
+    <button onclick="submitForm()">Submit</button>
+
+    <!-- Output -->
+    <div class="output" id="output">
+      <p id="showName"></p>
+      <p id="showEmail"></p>
+      <p id="showPassword"></p>
+      <p id="showMessage"></p>
+    </div>
+
+  </div>
+
+  <script>
+
+    // Name Validation
+    function validateName(){
+
+      let name = document.getElementById("name").value.trim();
+      let nameError = document.getElementById("nameError");
+
+      if(name === ""){
+        nameError.innerHTML = "Name is required";
+        return false;
+      }
+
+      else if(!/^[A-Za-z ]+$/.test(name)){
+        nameError.innerHTML = "Only letters are allowed";
+        return false;
+      }
+
+      else{
+        nameError.innerHTML = "";
+        return true;
+      }
+    }
+
+    // Email Validation
+    function validateEmail(){
+
+      let email = document.getElementById("email").value.trim();
+      let emailError = document.getElementById("emailError");
+
+      if(email === ""){
+        emailError.innerHTML = "Email is required";
+        return false;
+      }
+
+      else if(!/^[^ ]+@[^ ]+\.[a-z]{2,3}$/.test(email)){
+        emailError.innerHTML = "Enter a valid email";
+        return false;
+      }
+
+      else{
+        emailError.innerHTML = "";
+        return true;
+      }
+    }
+
+    // Password Validation
+    function validatePassword(){
+
+      let password = document.getElementById("password").value.trim();
+      let passwordError = document.getElementById("passwordError");
+
+      if(password === ""){
+        passwordError.innerHTML = "Password is required";
+        return false;
+      }
+
+      else if(password.length < 6){
+        passwordError.innerHTML =
+        "Password must be at least 6 characters";
+        return false;
+      }
+
+      else{
+        passwordError.innerHTML = "";
+        return true;
+      }
+    }
+
+    // Submit Form
+    function submitForm(){
+
+      let validName = validateName();
+      let validEmail = validateEmail();
+      let validPassword = validatePassword();
+
+      if(validName && validEmail && validPassword){
+
+        let name = document.getElementById("name").value;
+        let email = document.getElementById("email").value;
+        let password = document.getElementById("password").value;
+        let message = document.getElementById("message").value;
+
+        document.getElementById("showName").innerHTML =
+        "<strong>Name:</strong> " + name;
+
+        document.getElementById("showEmail").innerHTML =
+        "<strong>Email:</strong> " + email;
+
+        document.getElementById("showPassword").innerHTML =
+        "<strong>Password:</strong> " + password;
+
+        document.getElementById("showMessage").innerHTML =
+        "<strong>Message:</strong> " + message;
+
+        document.getElementById("output").style.display = "block";
+      }
+
+      else{
+        document.getElementById("output").style.display = "none";
+      }
+    }
+
+  </script>
+
+</body>
+</html>
